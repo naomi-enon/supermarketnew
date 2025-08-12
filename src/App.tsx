@@ -866,6 +866,51 @@ function App() {
                         <div className="space-y-6">
                           {aiCompareResult.products.length > 0 && (
                             <>
+                              {/* Matching Products Display */}
+                              <div>
+                                <h4 className="font-bold text-gray-900 mb-4">Comparing These Products</h4>
+                                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
+                                  {aiCompareResult.products.map((product) => {
+                                    const fullProduct = products.find(p => p.id === product.id);
+                                    if (!fullProduct) return null;
+                                    
+                                    return (
+                                      <div key={product.id} className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
+                                        <div className="relative">
+                                          <img
+                                            src={fullProduct.image}
+                                            alt={fullProduct.name}
+                                            className="w-full h-32 object-cover"
+                                          />
+                                          <div className="absolute top-2 right-2">
+                                            <span className="bg-emerald-600 text-white px-2 py-1 rounded-full text-xs font-medium">
+                                              {fullProduct.category}
+                                            </span>
+                                          </div>
+                                        </div>
+                                        <div className="p-3">
+                                          <h5 className="font-medium text-gray-900 text-sm mb-1 line-clamp-2">
+                                            {fullProduct.name}
+                                          </h5>
+                                          <p className="text-xs text-gray-500 mb-2">{fullProduct.unit}</p>
+                                          <div className="flex justify-between items-center">
+                                            <div className="text-sm text-gray-600">
+                                              Best at <span className="font-medium text-emerald-600">
+                                                {getStoreName(getLowestPriceStore(fullProduct.prices))}
+                                              </span>
+                                            </div>
+                                            <div className="font-bold text-emerald-600 flex items-center text-sm">
+                                              <Yen className="h-3 w-3 mr-1" />
+                                              {getLowestPrice(fullProduct.prices).toLocaleString()}
+                                            </div>
+                                          </div>
+                                        </div>
+                                      </div>
+                                    );
+                                  })}
+                                </div>
+                              </div>
+                              
                               {/* AI Verdict */}
                               <div className="bg-blue-50 border border-blue-200 rounded-lg p-6">
                                 <div className="flex items-start">
