@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from 'react';
-import { Star, MapPin, Search, Pen as Yen, Flag, AlertTriangle } from 'lucide-react';
+import { Star, MapPin, Search, Pen as Yen, Flag, AlertTriangle, Brain, Camera, ChefHat, Sparkles, ArrowRight } from 'lucide-react';
 
 interface Product {
   id: number;
@@ -28,6 +28,19 @@ interface FlaggedPrice {
   store: string;
   reason: string;
   timestamp: Date;
+}
+
+interface AICompareResult {
+  verdict: string;
+  tradeoffs: string[];
+  badges: { text: string; emoji: string; color: string }[];
+  products: {
+    id: number;
+    name: string;
+    score: number;
+    pricePerUnit: number;
+    normalizedUnit: string;
+  }[];
 }
 
 const stores: Store[] = [
@@ -314,6 +327,10 @@ function App() {
   const [flaggedPrices, setFlaggedPrices] = useState<FlaggedPrice[]>([]);
   const [showFlagModal, setShowFlagModal] = useState(false);
   const [flaggingProduct, setFlaggingProduct] = useState<{ productId: number; store: string } | null>(null);
+  const [activeAIFeature, setActiveAIFeature] = useState<string | null>(null);
+  const [aiCompareQuery, setAiCompareQuery] = useState('');
+  const [aiCompareResult, setAiCompareResult] = useState<AICompareResult | null>(null);
+  const [isAnalyzing, setIsAnalyzing] = useState(false);
 
   const toggleFavorite = (productId: number) => {
     const newFavorites = new Set(favorites);
@@ -363,6 +380,79 @@ function App() {
     setFlaggedPrices([...flaggedPrices, newFlag]);
     setShowFlagModal(false);
     setFlaggingProduct(null);
+  };
+
+  const performAICompare = async (query: string) => {
+    setIsAnalyzing(true);
+    
+    // Simulate AI analysis with realistic delay
+    await new Promise(resolve => setTimeout(resolve, 2000));
+    
+    // Find matching products based on query
+    const matchingProducts = products.filter(product =>
+      product.name.toLowerCase().includes(query.toLowerCase()) ||
+      product.category.toLowerCase().includes(query.toLowerCase())
+    ).slice(0, 4); // Limit to top 4 matches
+    
+    if (matchingProducts.length === 0) {
+      setAiCompareResult({
+        verdict: "No products found matching your search. Try searching for items like 'milk', 'rice', 'salmon', or 'bread'.",
+        tradeoffs: [],
+        badges: [],
+        products: []
+      });
+      setIsAnalyzing(false);
+      return;
+    }
+    
+    // Simulate AI analysis results
+    const analyzedProducts = matchingProducts.map(product => {
+      const lowestPrice = getLowestPrice(product.prices);
+      // Simulate normalized pricing and scoring
+      const pricePerUnit = lowestPrice / parseFloat(product.unit.replace(/[^\d.]/g, '') || '1');
+      const score = Math.random() * 40 + 60; // Random score between 60-100
+      
+      return {
+        id: product.id,
+        name: product.name,
+        score: Math.round(score),
+        pricePerUnit: Math.round(pricePerUnit),
+        normalizedUnit: '100g'
+      };
+    }).sort((a, b) => b.score - a.score);
+    
+    const topProduct = analyzedProducts[0];
+    const secondProduct = analyzedProducts[1];
+    
+    // Generate realistic AI verdict and analysis
+    const verdicts = [
+      `${topProduct.name} is your best choice - it offers excellent value at ¥${topProduct.pricePerUnit}/100g with superior nutritional profile.`,
+      `Go with ${topProduct.name} for the best balance of price, quality, and health benefits at this price point.`,
+      `${topProduct.name} wins on both value and nutrition, making it the smart choice for your regular shopping.`
+    ];
+    
+    const tradeoffs = [
+      `💰 Price: ${topProduct.name} costs ¥${topProduct.pricePerUnit}/100g vs ${secondProduct?.name || 'alternatives'} at ¥${secondProduct?.pricePerUnit || 'higher'}/100g`,
+      `🥗 Nutrition: Higher protein content and lower sodium compared to most alternatives`,
+      `⭐ Quality: Premium grade with consistent freshness based on customer reviews`,
+      `🏪 Availability: Consistently in stock across all three supermarkets`,
+      secondProduct ? `🔄 Alternative: ${secondProduct.name} is a solid backup choice if primary option unavailable` : '🎯 Clear winner: Significantly outperforms all alternatives'
+    ];
+    
+    const badges = [
+      { text: 'Best Value', emoji: '💲', color: 'bg-green-100 text-green-800' },
+      { text: 'Healthier Choice', emoji: '🥦', color: 'bg-blue-100 text-blue-800' },
+      { text: 'Top Rated', emoji: '⭐', color: 'bg-yellow-100 text-yellow-800' }
+    ];
+    
+    setAiCompareResult({
+      verdict: verdicts[Math.floor(Math.random() * verdicts.length)],
+      tradeoffs: tradeoffs.slice(0, 4),
+      badges: badges.slice(0, 2),
+      products: analyzedProducts
+    });
+    
+    setIsAnalyzing(false);
   };
 
   const isPriceFlagged = (productId: number, store: string) => {
@@ -626,7 +716,8 @@ function App() {
             {[
               { id: 'locations', label: 'Store Locations', count: stores.length },
               { id: 'products', label: 'All Products', count: filteredProducts.length },
-              { id: 'favorites', label: 'My Favorites', count: favorites.size }
+              { id: 'favorites', label: 'My Favorites', count: favorites.size },
+              { id: 'shop-smart', label: 'Shop Smart', count: 3 }
             ].map(tab => (
               <button
                 key={tab.id}
@@ -649,6 +740,245 @@ function App() {
 
       {/* Content */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        {activeTab === 'shop-smart' && (
+          <div>
+            <div className="mb-8">
+              <h2 className="text-2xl font-bold text-gray-900 mb-2">Shop Smart with AI</h2>
+              <p className="text-gray-600">
+                Let AI help you make smarter shopping decisions with personalized recommendations
+              </p>
+            </div>
+            
+            {!activeAIFeature ? (
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                {/* AI Compare Card */}
+                <div 
+                  onClick={() => setActiveAIFeature('compare')}
+                  className="bg-gradient-to-br from-blue-50 to-indigo-100 rounded-xl shadow-md hover:shadow-lg transition-all duration-300 p-8 cursor-pointer group border-2 border-transparent hover:border-blue-200"
+                >
+                  <div className="flex items-center justify-center w-16 h-16 bg-blue-500 rounded-full mb-6 group-hover:scale-110 transition-transform duration-200">
+                    <Brain className="h-8 w-8 text-white" />
+                  </div>
+                  <h3 className="text-xl font-bold text-gray-900 mb-3">AI Compare</h3>
+                  <p className="text-gray-600 mb-4">
+                    Get personalized product recommendations based on price, nutrition, quality, and your preferences.
+                  </p>
+                  <div className="flex items-center text-blue-600 font-medium group-hover:translate-x-1 transition-transform duration-200">
+                    Start Comparing <ArrowRight className="h-4 w-4 ml-2" />
+                  </div>
+                </div>
+                
+                {/* AI Review Scan Card */}
+                <div 
+                  onClick={() => setActiveAIFeature('scan')}
+                  className="bg-gradient-to-br from-emerald-50 to-green-100 rounded-xl shadow-md hover:shadow-lg transition-all duration-300 p-8 cursor-pointer group border-2 border-transparent hover:border-emerald-200"
+                >
+                  <div className="flex items-center justify-center w-16 h-16 bg-emerald-500 rounded-full mb-6 group-hover:scale-110 transition-transform duration-200">
+                    <Camera className="h-8 w-8 text-white" />
+                  </div>
+                  <h3 className="text-xl font-bold text-gray-900 mb-3">AI Review Scan</h3>
+                  <p className="text-gray-600 mb-4">
+                    Scan product labels to get instant insights on ingredients, allergens, and health ratings.
+                  </p>
+                  <div className="flex items-center text-emerald-600 font-medium group-hover:translate-x-1 transition-transform duration-200">
+                    Start Scanning <ArrowRight className="h-4 w-4 ml-2" />
+                  </div>
+                </div>
+                
+                {/* AI Recipe Maker Card */}
+                <div 
+                  onClick={() => setActiveAIFeature('recipe')}
+                  className="bg-gradient-to-br from-orange-50 to-red-100 rounded-xl shadow-md hover:shadow-lg transition-all duration-300 p-8 cursor-pointer group border-2 border-transparent hover:border-orange-200"
+                >
+                  <div className="flex items-center justify-center w-16 h-16 bg-orange-500 rounded-full mb-6 group-hover:scale-110 transition-transform duration-200">
+                    <ChefHat className="h-8 w-8 text-white" />
+                  </div>
+                  <h3 className="text-xl font-bold text-gray-900 mb-3">AI Recipe Maker</h3>
+                  <p className="text-gray-600 mb-4">
+                    Create personalized recipes based on your favorite products and dietary preferences.
+                  </p>
+                  <div className="flex items-center text-orange-600 font-medium group-hover:translate-x-1 transition-transform duration-200">
+                    Create Recipe <ArrowRight className="h-4 w-4 ml-2" />
+                  </div>
+                </div>
+              </div>
+            ) : (
+              <div>
+                {/* Back Button */}
+                <button
+                  onClick={() => {
+                    setActiveAIFeature(null);
+                    setAiCompareQuery('');
+                    setAiCompareResult(null);
+                  }}
+                  className="mb-6 flex items-center text-gray-600 hover:text-gray-800 transition-colors duration-200"
+                >
+                  <ArrowRight className="h-4 w-4 mr-2 rotate-180" />
+                  Back to Shop Smart
+                </button>
+                
+                {activeAIFeature === 'compare' && (
+                  <div>
+                    <div className="bg-white rounded-xl shadow-md p-8 mb-6">
+                      <div className="flex items-center mb-6">
+                        <div className="flex items-center justify-center w-12 h-12 bg-blue-500 rounded-full mr-4">
+                          <Brain className="h-6 w-6 text-white" />
+                        </div>
+                        <div>
+                          <h3 className="text-xl font-bold text-gray-900">AI Product Compare</h3>
+                          <p className="text-gray-600">Find the best product for your needs</p>
+                        </div>
+                      </div>
+                      
+                      <div className="relative mb-6">
+                        <input
+                          type="text"
+                          placeholder="What product are you looking for? (e.g., milk, rice, salmon)"
+                          value={aiCompareQuery}
+                          onChange={(e) => setAiCompareQuery(e.target.value)}
+                          className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 pr-24"
+                          onKeyPress={(e) => {
+                            if (e.key === 'Enter' && aiCompareQuery.trim()) {
+                              performAICompare(aiCompareQuery.trim());
+                            }
+                          }}
+                        />
+                        <button
+                          onClick={() => aiCompareQuery.trim() && performAICompare(aiCompareQuery.trim())}
+                          disabled={!aiCompareQuery.trim() || isAnalyzing}
+                          className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 disabled:opacity-50 disabled:cursor-not-allowed flex items-center"
+                        >
+                          {isAnalyzing ? (
+                            <>
+                              <Sparkles className="h-4 w-4 mr-1 animate-spin" />
+                              Analyzing
+                            </>
+                          ) : (
+                            <>
+                              <Sparkles className="h-4 w-4 mr-1" />
+                              Analyze
+                            </>
+                          )}
+                        </button>
+                      </div>
+                      
+                      {aiCompareResult && (
+                        <div className="space-y-6">
+                          {aiCompareResult.products.length > 0 && (
+                            <>
+                              {/* AI Verdict */}
+                              <div className="bg-blue-50 border border-blue-200 rounded-lg p-6">
+                                <div className="flex items-start">
+                                  <div className="flex items-center justify-center w-8 h-8 bg-blue-500 rounded-full mr-3 mt-0.5">
+                                    <Sparkles className="h-4 w-4 text-white" />
+                                  </div>
+                                  <div className="flex-1">
+                                    <h4 className="font-bold text-blue-900 mb-2">AI Recommendation</h4>
+                                    <p className="text-blue-800 text-lg leading-relaxed">{aiCompareResult.verdict}</p>
+                                  </div>
+                                </div>
+                              </div>
+                              
+                              {/* Badges */}
+                              {aiCompareResult.badges.length > 0 && (
+                                <div className="flex flex-wrap gap-3">
+                                  {aiCompareResult.badges.map((badge, index) => (
+                                    <span key={index} className={`px-3 py-1 rounded-full text-sm font-medium ${badge.color}`}>
+                                      {badge.emoji} {badge.text}
+                                    </span>
+                                  ))}
+                                </div>
+                              )}
+                              
+                              {/* Trade-offs */}
+                              <div>
+                                <h4 className="font-bold text-gray-900 mb-3">Key Differences</h4>
+                                <div className="space-y-2">
+                                  {aiCompareResult.tradeoffs.map((tradeoff, index) => (
+                                    <div key={index} className="flex items-start">
+                                      <div className="w-2 h-2 bg-blue-500 rounded-full mt-2 mr-3 flex-shrink-0"></div>
+                                      <p className="text-gray-700">{tradeoff}</p>
+                                    </div>
+                                  ))}
+                                </div>
+                              </div>
+                              
+                              {/* Product Comparison */}
+                              <div>
+                                <h4 className="font-bold text-gray-900 mb-4">Product Scores</h4>
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                  {aiCompareResult.products.map((product, index) => {
+                                    const fullProduct = products.find(p => p.id === product.id);
+                                    return (
+                                      <div key={product.id} className={`p-4 rounded-lg border-2 ${
+                                        index === 0 ? 'border-blue-500 bg-blue-50' : 'border-gray-200 bg-gray-50'
+                                      }`}>
+                                        <div className="flex items-center justify-between mb-2">
+                                          <h5 className="font-medium text-gray-900 text-sm">{product.name}</h5>
+                                          {index === 0 && (
+                                            <span className="bg-blue-500 text-white px-2 py-1 rounded-full text-xs font-medium">
+                                              Best Choice
+                                            </span>
+                                          )}
+                                        </div>
+                                        <div className="flex items-center justify-between">
+                                          <div className="text-sm text-gray-600">
+                                            AI Score: <span className="font-bold text-gray-900">{product.score}/100</span>
+                                          </div>
+                                          <div className="text-sm text-gray-600">
+                                            ¥{product.pricePerUnit}/{product.normalizedUnit}
+                                          </div>
+                                        </div>
+                                        <div className="mt-2 bg-gray-200 rounded-full h-2">
+                                          <div 
+                                            className={`h-2 rounded-full ${index === 0 ? 'bg-blue-500' : 'bg-gray-400'}`}
+                                            style={{ width: `${product.score}%` }}
+                                          ></div>
+                                        </div>
+                                      </div>
+                                    );
+                                  })}
+                                </div>
+                              </div>
+                            </>
+                          )}
+                          
+                          {aiCompareResult.products.length === 0 && (
+                            <div className="text-center py-8">
+                              <Search className="h-12 w-12 text-gray-300 mx-auto mb-4" />
+                              <p className="text-gray-600">{aiCompareResult.verdict}</p>
+                            </div>
+                          )}
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                )}
+                
+                {activeAIFeature === 'scan' && (
+                  <div className="bg-white rounded-xl shadow-md p-8">
+                    <div className="text-center py-12">
+                      <Camera className="h-16 w-16 text-gray-300 mx-auto mb-4" />
+                      <h3 className="text-lg font-medium text-gray-900 mb-2">AI Review Scan</h3>
+                      <p className="text-gray-500">Coming soon! Scan product labels for instant health insights.</p>
+                    </div>
+                  </div>
+                )}
+                
+                {activeAIFeature === 'recipe' && (
+                  <div className="bg-white rounded-xl shadow-md p-8">
+                    <div className="text-center py-12">
+                      <ChefHat className="h-16 w-16 text-gray-300 mx-auto mb-4" />
+                      <h3 className="text-lg font-medium text-gray-900 mb-2">AI Recipe Maker</h3>
+                      <p className="text-gray-500">Coming soon! Create recipes from your favorite products.</p>
+                    </div>
+                  </div>
+                )}
+              </div>
+            )}
+          </div>
+        )}
+
         {activeTab === 'favorites' && (
           <div>
             <div className="mb-6">
