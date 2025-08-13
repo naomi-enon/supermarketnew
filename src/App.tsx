@@ -687,6 +687,9 @@ function App() {
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [selectedProductForReview, setSelectedProductForReview] = useState<any>(null);
   const [isReviewModalOpen, setIsReviewModalOpen] = useState(false);
+  const [showReviewSearch, setShowReviewSearch] = useState(false);
+  const [reviewQuery, setReviewQuery] = useState('');
+  const [reviewProduct, setReviewProduct] = useState<Product | null>(null);
 
   const toggleFavorite = (productId: number) => {
     const newFavorites = new Set(favorites);
@@ -809,6 +812,20 @@ function App() {
     });
     
     setIsAnalyzing(false);
+  };
+
+  const handleReviewSearch = (query: string) => {
+    setReviewQuery(query);
+    const filtered = products.filter(product =>
+      product.name.toLowerCase().includes(query.toLowerCase())
+    );
+    // Reuse the same results array for simplicity
+  };
+
+  const handleReviewProductSelect = (product: Product) => {
+    setReviewProduct(product);
+    setShowReviewSearch(false);
+    setReviewQuery('');
   };
 
   const isPriceFlagged = (productId: number, store: string) => {
@@ -1160,14 +1177,15 @@ function App() {
                     <Camera className="h-8 w-8 text-white" />
                   </div>
                   <h3 className="text-xl font-bold text-gray-900 mb-3">AI Review Summary</h3>
-                  <p className="text-gray-600 mb-16">
-                    Summarizes customer reviews with AI.
-                  </p>
+                  <p className="text-gray-600 mb-8">Summarizes customer reviews with AI.</p>
+                  <button
+                    onClick={() => setShowReviewSearch(true)}
+                    className="bg-green-600 text-white px-6 py-2 rounded-lg hover:bg-green-700 transition-colors"
+                  >
+                    Start Reviewing
+                  </button>
                   
                   <div className="flex items-center text-green-600 font-medium group-hover:translate-x-1 transition-transform duration-200">
-
-                    
-                                     
                     Start Summarizing <ArrowRight className="h-4 w-4 ml-2" />  
                   </div>
                 </div>
@@ -1379,7 +1397,166 @@ function App() {
                   </div>
                 )}
                 
-                {activeAIFeature === 'scan' && (
+                {activeAIFeature === 'scan' && showReviewSearch && (
+                  <div className="bg-white rounded-lg shadow-md p-6 mb-6">
+                    <h3 className="text-xl font-semibold mb-4">Search for a Product to Review</h3>
+                    <div className="relative mb-4">
+                      <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
+                      <input
+                        type="text"
+                        placeholder="Search products..."
+                        value={reviewQuery}
+                        onChange={(e) => handleReviewSearch(e.target.value)}
+                        className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      />
+                    </div>
+                    
+                    {reviewQuery && (
+                      <div className="space-y-2 max-h-60 overflow-y-auto">
+                        {products.filter(product =>
+                          product.name.toLowerCase().includes(reviewQuery.toLowerCase())
+                        ).map((product) => (
+                          <div
+                            key={product.id}
+                            onClick={() => handleReviewProductSelect(product)}
+                            className="flex items-center gap-3 p-3 border border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50"
+                          >
+                            <img src={product.image} alt={product.name} className="w-12 h-12 object-cover rounded" />
+                            <div className="flex-1">
+                              <h4 className="font-medium">{product.name}</h4>
+                              <p className="text-sm text-gray-600">{product.category}</p>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                    
+                    <button
+                      onClick={() => {
+                        setShowReviewSearch(false);
+                        setReviewQuery('');
+                      }}
+                      className="mt-4 text-gray-600 hover:text-gray-800"
+                    >
+                      Cancel
+                    </button>
+                  </div>
+                )}
+
+                {activeAIFeature === 'scan' && reviewProduct && (
+                  <div className="bg-white rounded-lg shadow-md p-6 mb-6">
+                    <div className="flex items-center gap-4 mb-6">
+                      <img src={reviewProduct.image} alt={reviewProduct.name} className="w-16 h-16 object-cover rounded-lg" />
+                      <div>
+                        <h3 className="text-xl font-semibold">{reviewProduct.name}</h3>
+                        <p className="text-gray-600">{reviewProduct.category} • ¥{getLowestPrice(reviewProduct.prices)}</p>
+                      </div>
+                    </div>
+
+                    <div className="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-lg p-6 mb-6">
+                      <div className="flex items-center gap-2 mb-4">
+                        <Brain className="w-6 h-6 text-blue-600" />
+                        <h4 className="text-lg font-semibold text-blue-900">AI Review Summary</h4>
+                      </div>
+                      
+                      <div className="space-y-4">
+                        <div>
+                          <h5 className="font-semibold text-green-700 mb-2">✓ Pros</h5>
+                          <ul className="text-sm text-gray-700 space-y-1 ml-4">
+                            <li>• High quality ingredients and authentic Japanese taste</li>
+                            <li>• Great value for money compared to imported alternatives</li>
+                            <li>• Convenient packaging and long shelf life</li>
+                            <li>• Versatile for various cooking applications</li>
+                          </ul>
+                        </div>
+                        
+                        <div>
+                          <h5 className="font-semibold text-red-700 mb-2">✗ Cons</h5>
+                          <ul className="text-sm text-gray-700 space-y-1 ml-4">
+                            <li>• May be too salty for some preferences</li>
+                            <li>• Limited availability in some stores</li>
+                            <li>• Packaging could be more eco-friendly</li>
+                          </ul>
+                        </div>
+                        
+                        <div className="bg-white rounded-lg p-4 border-l-4 border-blue-500">
+                          <h5 className="font-semibold text-blue-900 mb-2">🎯 AI Verdict</h5>
+                          <p className="text-sm text-gray-700">
+                            This product receives consistently positive reviews for its authentic taste and quality. 
+                            Most customers appreciate the value proposition and versatility. Recommended for those 
+                            seeking authentic Japanese flavors, though those sensitive to sodium should use sparingly.
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="border-t pt-6">
+                      <div className="flex items-center justify-between mb-4">
+                        <h4 className="text-lg font-semibold">Customer Reviews</h4>
+                        <div className="flex items-center gap-2">
+                          <div className="flex text-amber-500">
+                            {'★'.repeat(Math.floor(reviewProduct.ratingAverage || 4.2))}
+                            {'☆'.repeat(5 - Math.floor(reviewProduct.ratingAverage || 4.2))}
+                          </div>
+                          <span className="text-sm text-gray-600">
+                            {(reviewProduct.ratingAverage || 4.2).toFixed(1)} (127 reviews)
+                          </span>
+                        </div>
+                      </div>
+                      
+                      <div className="space-y-4">
+                        <div className="bg-gray-50 rounded-lg p-4">
+                          <div className="flex items-center gap-2 mb-2">
+                            <div className="flex text-amber-500 text-sm">★★★★★</div>
+                            <span className="text-sm font-medium">Takeshi M.</span>
+                            <span className="text-xs text-gray-500">2 days ago</span>
+                          </div>
+                          <p className="text-sm text-gray-700">
+                            "Excellent quality! Tastes just like what I remember from my grandmother's cooking. 
+                            The flavor is authentic and not too overpowering. Will definitely buy again."
+                          </p>
+                        </div>
+                        
+                        <div className="bg-gray-50 rounded-lg p-4">
+                          <div className="flex items-center gap-2 mb-2">
+                            <div className="flex text-amber-500 text-sm">★★★★☆</div>
+                            <span className="text-sm font-medium">Sarah K.</span>
+                            <span className="text-xs text-gray-500">1 week ago</span>
+                          </div>
+                          <p className="text-sm text-gray-700">
+                            "Good product overall, but I found it a bit saltier than expected. 
+                            The packaging is convenient and the price is reasonable for the quality."
+                          </p>
+                        </div>
+                        
+                        <div className="bg-gray-50 rounded-lg p-4">
+                          <div className="flex items-center gap-2 mb-2">
+                            <div className="flex text-amber-500 text-sm">★★★★★</div>
+                            <span className="text-sm font-medium">Hiroshi T.</span>
+                            <span className="text-xs text-gray-500">2 weeks ago</span>
+                          </div>
+                          <p className="text-sm text-gray-700">
+                            "Perfect for making traditional dishes. The taste is spot on and the quality 
+                            is consistent. I've been buying this brand for years and it never disappoints."
+                          </p>
+                        </div>
+                      </div>
+                      
+                      <button className="mt-4 text-blue-600 hover:text-blue-800 text-sm font-medium">
+                        View all 127 reviews →
+                      </button>
+                    </div>
+                    
+                    <button
+                      onClick={() => setReviewProduct(null)}
+                      className="mt-6 bg-gray-100 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-200 transition-colors"
+                    >
+                      ← Back to Search
+                    </button>
+                  </div>
+                )}
+                
+                {activeAIFeature === 'scan' && !showReviewSearch && !reviewProduct && (
                   <div className="bg-white rounded-xl shadow-md p-8">
                     <div className="text-center py-12">
                       <Camera className="h-16 w-16 text-gray-300 mx-auto mb-4" />
