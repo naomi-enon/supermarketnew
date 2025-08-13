@@ -1159,7 +1159,7 @@ function App() {
                   <div className="flex items-center justify-center w-16 h-16 bg-green-500 rounded-full mb-6 group-hover:scale-110 transition-transform duration-200">
                     <Camera className="h-8 w-8 text-white" />
                   </div>
-                  <h3 className="text-xl font-bold text-gray-900 mb-3">AI Review Scan</h3>
+                  <h3 className="text-xl font-bold text-gray-900 mb-3">AI Review Summary</h3>
                   <p className="text-gray-600 mb-4">
                     Scan product labels with your camera to get instant health insights and ingredient analysis.
                   </p>
