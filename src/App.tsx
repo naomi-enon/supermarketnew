@@ -1177,7 +1177,7 @@ function App() {
                     <Camera className="h-8 w-8 text-white" />
                   </div>
                   <h3 className="text-xl font-bold text-gray-900 mb-4">AI Review Summary</h3>
-                  <p className="text-gray-600 mb-8">Summarizes customer reviews with AI.</p>
+                  <p className="text-gray-600 mb-12">Summarizes customer reviews with AI.</p>
                   
                   <div className="flex items-center text-green-600 font-medium group-hover:translate-x-1 transition-transform duration-200">
                   Start Summarizing <ArrowRight className="h-4 w-4 ml-2"/>  
