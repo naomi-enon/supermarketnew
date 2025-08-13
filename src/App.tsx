@@ -1167,7 +1167,7 @@ function App() {
                   <div className="flex items-center text-green-600 font-medium group-hover:translate-x-1 transition-transform duration-200">
 
                     
-                
+                <br /><br />
                     Start Summarizing <ArrowRight className="h-4 w-4 ml-2" />
                   </div>
                 </div>
