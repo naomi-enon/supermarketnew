@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from 'react';
-import { Star, MapPin, Search, Pen as Yen, Flag, AlertTriangle, Brain, Camera, ChefHat, Sparkles, ArrowRight, X } from 'lucide-react';
+import { ShoppingCart, Search, MapPin, Star, X, StarHalf } from 'lucide-react';
 
 interface Product {
   id: number;
@@ -11,6 +11,9 @@ interface Product {
     ff: number;
   };
   unit: string;
+  ratingAverage: number;
+  ratingCount: number;
+  ratingBreakdown: { "5": number; "4": number; "3": number; "2": number; "1": number };
   image: string;
 }
 
@@ -910,25 +913,7 @@ function App() {
     );
   };
 
-  const StoreCard = ({ store }: { store: Store }) => (
-    <div className="bg-white rounded-xl shadow-md hover:shadow-lg transition-all duration-300 p-6">
-      <div className="flex items-start justify-between mb-4">
-        <div>
-          <h3 className="font-bold text-xl text-gray-800 mb-2">{store.name}</h3>
-          <div className="flex items-center text-gray-600 mb-2">
-            <MapPin className="h-4 w-4 mr-2 text-emerald-600" />
-            <span className="text-sm">{store.address}</span>
-          </div>
-        </div>
-      </div>
-      
-      <div className="space-y-3">
-        <div className="flex justify-between">
-          <span className="text-sm font-medium text-gray-600">Hours:</span>
-          <span className="text-sm text-gray-800">{store.hours}</span>
-        </div>
-        <div className="flex justify-between">
-          <span className="text-sm font-medium text-gray-600">Phone:</span>
+  // Rating modal functions
           <span className="text-sm text-emerald-600">{store.phone}</span>
         </div>
       </div>
@@ -1027,64 +1012,7 @@ function App() {
                 {/* AI Review Scan Card */}
                 <div 
                   onClick={() => setActiveAIFeature('scan')}
-                  className="bg-gradient-to-br from-emerald-50 to-green-100 rounded-xl shadow-md hover:shadow-lg transition-all duration-300 p-8 cursor-pointer group border-2 border-transparent hover:border-emerald-200"
-                >
-                  <div className="flex items-center justify-center w-16 h-16 bg-emerald-500 rounded-full mb-6 group-hover:scale-110 transition-transform duration-200">
-                    <Camera className="h-8 w-8 text-white" />
-                  </div>
-                  <h3 className="text-xl font-bold text-gray-900 mb-3">AI Review Scan</h3>
-                  <p className="text-gray-600 mb-4">
-                    Scan product labels to get instant insights on ingredients, allergens, and health ratings.
-                  </p>
-                  <div className="flex items-center text-emerald-600 font-medium group-hover:translate-x-1 transition-transform duration-200">
-                    Start Scanning <ArrowRight className="h-4 w-4 ml-2" />
-                  </div>
-                </div>
-                
-                {/* AI Recipe Maker Card */}
-                <div 
-                  onClick={() => setActiveAIFeature('recipe')}
-                  className="bg-gradient-to-br from-orange-50 to-red-100 rounded-xl shadow-md hover:shadow-lg transition-all duration-300 p-8 cursor-pointer group border-2 border-transparent hover:border-orange-200"
-                >
-                  <div className="flex items-center justify-center w-16 h-16 bg-orange-500 rounded-full mb-6 group-hover:scale-110 transition-transform duration-200">
-                    <ChefHat className="h-8 w-8 text-white" />
-                  </div>
-                  <h3 className="text-xl font-bold text-gray-900 mb-3">AI Recipe Maker</h3>
-                  <p className="text-gray-600 mb-4">
-                    Create personalized recipes based on your favorite products and dietary preferences.
-                  </p>
-                  <div className="flex items-center text-orange-600 font-medium group-hover:translate-x-1 transition-transform duration-200">
-                    Create Recipe <ArrowRight className="h-4 w-4 ml-2" />
-                  </div>
-                </div>
-              </div>
-            ) : (
-              <div>
-                {/* Back Button */}
-                <button
-                  onClick={() => {
-                    setActiveAIFeature(null);
-                    setAiCompareQuery('');
-                    setAiCompareResult(null);
-                  }}
-                  className="mb-6 flex items-center text-gray-600 hover:text-gray-800 transition-colors duration-200"
-                >
-                  <ArrowRight className="h-4 w-4 mr-2 rotate-180" />
-                  Back to Shop Smart
-                </button>
-                
-                {activeAIFeature === 'compare' && (
-                  <div>
-                    <div className="bg-white rounded-xl shadow-md p-8 mb-6">
-                      <div className="flex items-center mb-6">
-                        <div className="flex items-center justify-center w-12 h-12 bg-blue-500 rounded-full mr-4">
-                          <Brain className="h-6 w-6 text-white" />
-                        </div>
-                        <div>
-                          <h3 className="text-xl font-bold text-gray-900">AI Product Compare</h3>
-                          <p className="text-gray-600">Find the best product for your needs</p>
-                        </div>
-                      </div>
+                      <ProductCard key={product.id} product={product} />
                       
                       <div className="relative mb-6">
                         <input
