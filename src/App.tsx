@@ -587,35 +587,55 @@ const ReviewModal = ({ product, isOpen, onClose }: {
                 <div key={star} className="flex items-center gap-3">
                   <span className="text-sm font-medium w-8">{star}★</span>
                   <div className="flex-1 bg-gray-200 rounded-full h-2">
-                    <div 
-                      className="bg-yellow-400 h-2 rounded-full transition-all duration-300"
-                      style={{ width: `${percentage}%` }}
-                    />
+          {selectedProduct?.ratingCount > 0 ? (
+            /* Rating distribution */
+            <div className="space-y-3 mb-6">
+              {[5, 4, 3, 2, 1].map((star) => {
+                const count = selectedProduct?.ratingBreakdown?.[star] || 0;
+                const percentage = selectedProduct?.ratingCount > 0 
+                  ? Math.round((count / selectedProduct.ratingCount) * 100) 
+                  : 0;
+                
+                return (
+                  <div key={star} className="flex items-center gap-3">
+                    <span className="text-sm font-medium w-8">{star}★</span>
+                    <div className="flex-1 bg-gray-200 rounded-full h-2">
+                      <div 
+                        className="bg-amber-500 h-2 rounded-full transition-all duration-300"
+                        style={{ width: `${percentage}%` }}
+                      />
+                    </div>
+                    <span className="text-sm text-gray-600 w-10 text-right">
+                      {percentage}%
+                    </span>
                   </div>
-                  <span className="text-sm text-gray-600 w-10 text-right">
-                    {percentage}%
-                  </span>
-                </div>
-              );
-            })}
-          </div>
-
-          {/* No reviews state */}
-          {product.ratingCount === 0 && (
-            <div className="text-center py-4 text-gray-500">
-              No reviews yet — be the first to review.
+                );
+              })}
+            </div>
+          ) : (
+            /* No reviews state */
+            <div className="space-y-3 mb-6">
+              {[5, 4, 3, 2, 1].map((star) => (
+                <div key={star} className="flex items-center gap-3">
+                  <span className="text-sm font-medium w-8">{star}★</span>
+                  <div className="flex-1 bg-gray-200 rounded-full h-2">
+                    <div className="bg-gray-300 h-2 rounded-full w-0" />
+                  </div>
+                  <span className="text-sm text-gray-600 w-10 text-right">0%</span>
+          {/* Action buttons */}
+              ))}
             </div>
           )}
-
-          {/* Action buttons */}
-          <div className="flex gap-4 pt-4 border-t">
-            <button
-              disabled={product.ratingCount === 0}
               className={`flex-1 py-2 px-4 rounded-lg font-medium transition-colors ${
                 product.ratingCount === 0
                   ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
                   : 'bg-blue-50 text-blue-600 hover:bg-blue-100'
+              className={`flex-1 px-4 py-2 border rounded-lg transition-colors duration-200 ${
+                selectedProduct?.ratingCount > 0 
+                  ? 'text-blue-600 border-blue-600 hover:bg-blue-50' 
+                  : 'text-gray-400 border-gray-300 cursor-not-allowed'
               }`}
+              disabled={selectedProduct?.ratingCount === 0}
             >
               Read customer reviews
             </button>
@@ -721,10 +741,6 @@ function App() {
         tradeoffs: [],
         badges: [],
         products: []
-      });
-      setIsAnalyzing(false);
-      return;
-    }
     
     // Simulate AI analysis results
     const analyzedProducts = matchingProducts.map(product => {
@@ -952,9 +968,15 @@ function App() {
                       }}
                       className="p-1 hover:bg-orange-100 rounded transition-colors duration-200"
                       title="Flag incorrect price"
-                    >
-                      <Flag className="h-3 w-3 text-orange-400 hover:text-orange-600" />
-                    </button>
+            {selectedProduct?.ratingCount > 0 ? (
+              <p className="text-gray-600">
+                {selectedProduct.ratingCount} reviews
+              </p>
+            ) : (
+              <p className="text-gray-600 mb-4">
+                This product has no reviews yet. Be the first to add one!
+              </p>
+            )}
                   </div>
                 </div>
               ))}
