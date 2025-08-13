@@ -916,9 +916,10 @@ function App() {
   // Rating modal functions
           <span className="text-sm text-emerald-600">{store.phone}</span>
         </div>
+        <button className="w-full mt-4 bg-emerald-600 text-white py-2 px-4 rounded-lg hover:bg-emerald-700 transition-colors duration-200">
+          Get Directions
+        </button>
       </div>
-      
-      <button className="w-full mt-4 bg-emerald-600 text-white py-2 px-4 rounded-lg hover:bg-emerald-700 transition-colors duration-200">
         View on Map
       </button>
     </div>
