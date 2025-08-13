@@ -23,10 +23,10 @@ export default function RatingRow({ average = 0, count = 0, onClick }: Props) {
   return (
     <button
       type="button"
-      onClick={onClick}
+      onClick={() => { console.debug("CLICK RatingRow"); onClick?.(); }}
       aria-label={`Average rating ${average || 0} out of 5`}
       aria-haspopup="dialog"
-      className="mt-2 w-full text-left flex items-center gap-2 text-slate-700 hover:text-slate-900"
+      className="mt-2 w-full text-left flex items-center gap-2 cursor-pointer text-slate-700 hover:text-slate-900"
     >
       <span>{stars}</span>
       {count && count > 0 ? (
