@@ -88,6 +88,30 @@ const products: Product[] = [
     image: 'https://images.pexels.com/photos/1647163/pexels-photo-1647163.jpeg'
   },
   {
+    id: 21,
+    name: 'Frozen Salmon Fillets',
+    category: 'Seafood',
+    image: 'https://images.pexels.com/photos/725991/pexels-photo-725991.jpeg?auto=compress&cs=tinysrgb&w=800',
+    unit: '1kg',
+    stores: [
+      { name: 'Costco', price: 1980 },
+      { name: 'Aeon', price: 2200 },
+      { name: 'Don Quijote', price: 2100 }
+    ]
+  },
+  {
+    id: 22,
+    name: 'Wild Pacific Salmon Fillets',
+    category: 'Seafood',
+    image: 'https://images.pexels.com/photos/1683545/pexels-photo-1683545.jpeg?auto=compress&cs=tinysrgb&w=800',
+    unit: '400g',
+    stores: [
+      { name: 'Whole Foods Market', price: 3800 },
+      { name: 'National Azabu', price: 3600 },
+      { name: 'Kinokuniya', price: 3750 }
+    ]
+  },
+  {
     id: 3,
     name: 'Organic Vegetables Mix',
     category: 'Vegetables',
