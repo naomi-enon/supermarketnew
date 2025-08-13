@@ -1181,7 +1181,7 @@ function App() {
                     <ChefHat className="h-8 w-8 text-white" />
                   </div>
                   <h3 className="text-xl font-bold text-gray-900 mb-3">AI Recipe Maker</h3>
-                  <p className="text-gray-600 mb-12">
+                  <p className="text-gray-600 mb-10">
                     Create personalized recipes using your favorite products and dietary preferences.
                   </p>
                   <div className="flex items-center text-purple-600 font-medium group-hover:translate-x-1 transition-transform duration-200">
