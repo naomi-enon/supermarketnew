@@ -1180,7 +1180,7 @@ function App() {
                   <p className="text-gray-600 mb-2">Summarizes customer reviews with AI.</p>
                   
                   <div className="flex items-center text-green-600 font-medium group-hover:translate-x-1 transition-transform duration-200">
-                  Start Summarizing <ArrowRight className="h-4 w-4 ml-10" />  
+                  Start Summarizing <ArrowRight className="h-4 w-4 ml-10"/>  
                   </div>
                 </div>
                 
