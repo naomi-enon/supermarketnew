@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from 'react';
-import { ShoppingCart, Search, MapPin, Star, X, StarHalf } from 'lucide-react';
+import { ShoppingCart, Search, MapPin, Star, X, StarHalf, Brain, ArrowRight, Sparkles, Camera, ChefHat, Flag, AlertTriangle } from 'lucide-react';
 
 interface Product {
   id: number;
@@ -46,6 +46,10 @@ interface AICompareResult {
   }[];
 }
 
+const Yen = ({ className }: { className?: string }) => (
+  <span className={className}>¥</span>
+);
+
 const stores: Store[] = [
   {
     id: 'seijo',
@@ -80,6 +84,9 @@ const products: Product[] = [
     category: 'Grains',
     prices: { seijo: 2980, maruetsu: 2450, ff: 2680 },
     unit: '5kg',
+    ratingAverage: 0,
+    ratingCount: 0,
+    ratingBreakdown: { "5": 0, "4": 0, "3": 0, "2": 0, "1": 0 },
     image: 'https://images.pexels.com/photos/1059905/pexels-photo-1059905.jpeg'
   },
   {
@@ -88,6 +95,9 @@ const products: Product[] = [
     category: 'Seafood',
     prices: { seijo: 1580, maruetsu: 1280, ff: 1450 },
     unit: '100g',
+    ratingAverage: 0,
+    ratingCount: 0,
+    ratingBreakdown: { "5": 0, "4": 0, "3": 0, "2": 0, "1": 0 },
     image: 'https://images.pexels.com/photos/1647163/pexels-photo-1647163.jpeg'
   },
   {
@@ -96,6 +106,9 @@ const products: Product[] = [
     category: 'Vegetables',
     prices: { seijo: 680, maruetsu: 520, ff: 450 },
     unit: '300g',
+    ratingAverage: 0,
+    ratingCount: 0,
+    ratingBreakdown: { "5": 0, "4": 0, "3": 0, "2": 0, "1": 0 },
     image: 'https://images.pexels.com/photos/1400172/pexels-photo-1400172.jpeg'
   },
   {
@@ -104,6 +117,9 @@ const products: Product[] = [
     category: 'Meat',
     prices: { seijo: 8900, maruetsu: 7800, ff: 8200 },
     unit: '200g',
+    ratingAverage: 0,
+    ratingCount: 0,
+    ratingBreakdown: { "5": 0, "4": 0, "3": 0, "2": 0, "1": 0 },
     image: 'https://images.pexels.com/photos/361184/asparagus-steak-veal-steak-veal-361184.jpeg'
   },
   {
@@ -112,6 +128,9 @@ const products: Product[] = [
     category: 'Dairy',
     prices: { seijo: 380, maruetsu: 298, ff: 320 },
     unit: '1L',
+    ratingAverage: 0,
+    ratingCount: 0,
+    ratingBreakdown: { "5": 0, "4": 0, "3": 0, "2": 0, "1": 0 },
     image: 'https://images.pexels.com/photos/416978/pexels-photo-416978.jpeg'
   },
   {
@@ -120,6 +139,9 @@ const products: Product[] = [
     category: 'Bakery',
     prices: { seijo: 580, maruetsu: 380, ff: 420 },
     unit: '1 loaf',
+    ratingAverage: 0,
+    ratingCount: 0,
+    ratingBreakdown: { "5": 0, "4": 0, "3": 0, "2": 0, "1": 0 },
     image: 'https://images.pexels.com/photos/209206/pexels-photo-209206.jpeg'
   },
   {
@@ -128,6 +150,9 @@ const products: Product[] = [
     category: 'Beverages',
     prices: { seijo: 1280, maruetsu: 980, ff: 1150 },
     unit: '100g',
+    ratingAverage: 0,
+    ratingCount: 0,
+    ratingBreakdown: { "5": 0, "4": 0, "3": 0, "2": 0, "1": 0 },
     image: 'https://images.pexels.com/photos/1638280/pexels-photo-1638280.jpeg'
   },
   {
@@ -136,6 +161,9 @@ const products: Product[] = [
     category: 'Dairy',
     prices: { seijo: 580, maruetsu: 450, ff: 520 },
     unit: '12 eggs',
+    ratingAverage: 0,
+    ratingCount: 0,
+    ratingBreakdown: { "5": 0, "4": 0, "3": 0, "2": 0, "1": 0 },
     image: 'https://images.pexels.com/photos/162712/egg-white-food-protein-162712.jpeg'
   },
   {
@@ -144,6 +172,9 @@ const products: Product[] = [
     category: 'Grains',
     prices: { seijo: 480, maruetsu: 320, ff: 380 },
     unit: '500g',
+    ratingAverage: 0,
+    ratingCount: 0,
+    ratingBreakdown: { "5": 0, "4": 0, "3": 0, "2": 0, "1": 0 },
     image: 'https://images.pexels.com/photos/1437267/pexels-photo-1437267.jpeg'
   },
   {
@@ -152,6 +183,9 @@ const products: Product[] = [
     category: 'Fruits',
     prices: { seijo: 890, maruetsu: 680, ff: 750 },
     unit: '1kg',
+    ratingAverage: 0,
+    ratingCount: 0,
+    ratingBreakdown: { "5": 0, "4": 0, "3": 0, "2": 0, "1": 0 },
     image: 'https://images.pexels.com/photos/1132047/pexels-photo-1132047.jpeg'
   },
   {
@@ -160,6 +194,9 @@ const products: Product[] = [
     category: 'Condiments',
     prices: { seijo: 680, maruetsu: 480, ff: 580 },
     unit: '500ml',
+    ratingAverage: 0,
+    ratingCount: 0,
+    ratingBreakdown: { "5": 0, "4": 0, "3": 0, "2": 0, "1": 0 },
     image: 'https://images.pexels.com/photos/6419733/pexels-photo-6419733.jpeg'
   },
   {
@@ -168,6 +205,9 @@ const products: Product[] = [
     category: 'Condiments',
     prices: { seijo: 580, maruetsu: 420, ff: 480 },
     unit: '400g',
+    ratingAverage: 0,
+    ratingCount: 0,
+    ratingBreakdown: { "5": 0, "4": 0, "3": 0, "2": 0, "1": 0 },
     image: 'https://images.pexels.com/photos/5949892/pexels-photo-5949892.jpeg'
   },
   {
@@ -176,6 +216,9 @@ const products: Product[] = [
     category: 'Protein',
     prices: { seijo: 280, maruetsu: 180, ff: 220 },
     unit: '300g',
+    ratingAverage: 0,
+    ratingCount: 0,
+    ratingBreakdown: { "5": 0, "4": 0, "3": 0, "2": 0, "1": 0 },
     image: 'https://images.pexels.com/photos/7625056/pexels-photo-7625056.jpeg'
   },
   {
@@ -184,6 +227,9 @@ const products: Product[] = [
     category: 'Condiments',
     prices: { seijo: 480, maruetsu: 320, ff: 380 },
     unit: '10 sheets',
+    ratingAverage: 0,
+    ratingCount: 0,
+    ratingBreakdown: { "5": 0, "4": 0, "3": 0, "2": 0, "1": 0 },
     image: 'https://images.pexels.com/photos/5949915/pexels-photo-5949915.jpeg'
   },
   {
@@ -192,6 +238,9 @@ const products: Product[] = [
     category: 'Condiments',
     prices: { seijo: 380, maruetsu: 280, ff: 320 },
     unit: '400g',
+    ratingAverage: 0,
+    ratingCount: 0,
+    ratingBreakdown: { "5": 0, "4": 0, "3": 0, "2": 0, "1": 0 },
     image: 'https://images.pexels.com/photos/6419733/pexels-photo-6419733.jpeg'
   },
   {
@@ -200,6 +249,9 @@ const products: Product[] = [
     category: 'Seafood',
     prices: { seijo: 4800, maruetsu: 4200, ff: 4500 },
     unit: '600g',
+    ratingAverage: 0,
+    ratingCount: 0,
+    ratingBreakdown: { "5": 0, "4": 0, "3": 0, "2": 0, "1": 0 },
     image: 'https://images.pexels.com/photos/725991/pexels-photo-725991.jpeg'
   },
   {
@@ -208,6 +260,9 @@ const products: Product[] = [
     category: 'Seafood',
     prices: { seijo: 2300, maruetsu: 1800, ff: 2100 },
     unit: '200g',
+    ratingAverage: 0,
+    ratingCount: 0,
+    ratingBreakdown: { "5": 0, "4": 0, "3": 0, "2": 0, "1": 0 },
     image: 'https://images.pexels.com/photos/3296434/pexels-photo-3296434.jpeg'
   },
   {
@@ -216,6 +271,9 @@ const products: Product[] = [
     category: 'Grains',
     prices: { seijo: 380, maruetsu: 250, ff: 300 },
     unit: '300g',
+    ratingAverage: 0,
+    ratingCount: 0,
+    ratingBreakdown: { "5": 0, "4": 0, "3": 0, "2": 0, "1": 0 },
     image: 'https://images.pexels.com/photos/5949915/pexels-photo-5949915.jpeg'
   },
   {
@@ -224,6 +282,9 @@ const products: Product[] = [
     category: 'Vegetables',
     prices: { seijo: 580, maruetsu: 420, ff: 480 },
     unit: '200g',
+    ratingAverage: 0,
+    ratingCount: 0,
+    ratingBreakdown: { "5": 0, "4": 0, "3": 0, "2": 0, "1": 0 },
     image: 'https://images.pexels.com/photos/1618900/pexels-photo-1618900.jpeg'
   },
   {
@@ -232,6 +293,9 @@ const products: Product[] = [
     category: 'Condiments',
     prices: { seijo: 480, maruetsu: 320, ff: 380 },
     unit: '200g',
+    ratingAverage: 0,
+    ratingCount: 0,
+    ratingBreakdown: { "5": 0, "4": 0, "3": 0, "2": 0, "1": 0 },
     image: 'https://images.pexels.com/photos/5949915/pexels-photo-5949915.jpeg'
   },
   {
@@ -240,6 +304,9 @@ const products: Product[] = [
     category: 'Beverages',
     prices: { seijo: 2800, maruetsu: 2200, ff: 2500 },
     unit: '50g',
+    ratingAverage: 0,
+    ratingCount: 0,
+    ratingBreakdown: { "5": 0, "4": 0, "3": 0, "2": 0, "1": 0 },
     image: 'https://images.pexels.com/photos/1638280/pexels-photo-1638280.jpeg'
   },
   {
@@ -248,6 +315,9 @@ const products: Product[] = [
     category: 'Condiments',
     prices: { seijo: 580, maruetsu: 380, ff: 480 },
     unit: '100g',
+    ratingAverage: 0,
+    ratingCount: 0,
+    ratingBreakdown: { "5": 0, "4": 0, "3": 0, "2": 0, "1": 0 },
     image: 'https://images.pexels.com/photos/6419733/pexels-photo-6419733.jpeg'
   },
   {
@@ -256,6 +326,9 @@ const products: Product[] = [
     category: 'Condiments',
     prices: { seijo: 280, maruetsu: 180, ff: 220 },
     unit: '200g',
+    ratingAverage: 0,
+    ratingCount: 0,
+    ratingBreakdown: { "5": 0, "4": 0, "3": 0, "2": 0, "1": 0 },
     image: 'https://images.pexels.com/photos/209206/pexels-photo-209206.jpeg'
   },
   {
@@ -264,6 +337,9 @@ const products: Product[] = [
     category: 'Condiments',
     prices: { seijo: 380, maruetsu: 250, ff: 300 },
     unit: '200g',
+    ratingAverage: 0,
+    ratingCount: 0,
+    ratingBreakdown: { "5": 0, "4": 0, "3": 0, "2": 0, "1": 0 },
     image: 'https://images.pexels.com/photos/2161543/pexels-photo-2161543.jpeg'
   },
   {
@@ -272,6 +348,9 @@ const products: Product[] = [
     category: 'Grains',
     prices: { seijo: 480, maruetsu: 320, ff: 380 },
     unit: '500g',
+    ratingAverage: 0,
+    ratingCount: 0,
+    ratingBreakdown: { "5": 0, "4": 0, "3": 0, "2": 0, "1": 0 },
     image: 'https://images.pexels.com/photos/1437267/pexels-photo-1437267.jpeg'
   },
   {
@@ -280,6 +359,9 @@ const products: Product[] = [
     category: 'Condiments',
     prices: { seijo: 880, maruetsu: 680, ff: 750 },
     unit: '40g',
+    ratingAverage: 0,
+    ratingCount: 0,
+    ratingBreakdown: { "5": 0, "4": 0, "3": 0, "2": 0, "1": 0 },
     image: 'https://images.pexels.com/photos/5949915/pexels-photo-5949915.jpeg'
   },
   {
@@ -288,6 +370,9 @@ const products: Product[] = [
     category: 'Vegetables',
     prices: { seijo: 480, maruetsu: 320, ff: 380 },
     unit: '500g',
+    ratingAverage: 0,
+    ratingCount: 0,
+    ratingBreakdown: { "5": 0, "4": 0, "3": 0, "2": 0, "1": 0 },
     image: 'https://images.pexels.com/photos/1400172/pexels-photo-1400172.jpeg'
   },
   {
@@ -296,6 +381,9 @@ const products: Product[] = [
     category: 'Beverages',
     prices: { seijo: 1880, maruetsu: 1450, ff: 1680 },
     unit: '720ml',
+    ratingAverage: 0,
+    ratingCount: 0,
+    ratingBreakdown: { "5": 0, "4": 0, "3": 0, "2": 0, "1": 0 },
     image: 'https://images.pexels.com/photos/1638280/pexels-photo-1638280.jpeg'
   },
   {
@@ -304,6 +392,9 @@ const products: Product[] = [
     category: 'Grains',
     prices: { seijo: 180, maruetsu: 120, ff: 150 },
     unit: '1 pack',
+    ratingAverage: 0,
+    ratingCount: 0,
+    ratingBreakdown: { "5": 0, "4": 0, "3": 0, "2": 0, "1": 0 },
     image: 'https://images.pexels.com/photos/1437267/pexels-photo-1437267.jpeg'
   },
   {
@@ -312,6 +403,9 @@ const products: Product[] = [
     category: 'Vegetables',
     prices: { seijo: 280, maruetsu: 180, ff: 220 },
     unit: '3 pieces',
+    ratingAverage: 0,
+    ratingCount: 0,
+    ratingBreakdown: { "5": 0, "4": 0, "3": 0, "2": 0, "1": 0 },
     image: 'https://images.pexels.com/photos/1400172/pexels-photo-1400172.jpeg'
   },
   {
@@ -320,6 +414,9 @@ const products: Product[] = [
     category: 'Grains',
     prices: { seijo: 380, maruetsu: 250, ff: 300 },
     unit: '30 pieces',
+    ratingAverage: 0,
+    ratingCount: 0,
+    ratingBreakdown: { "5": 0, "4": 0, "3": 0, "2": 0, "1": 0 },
     image: 'https://images.pexels.com/photos/1437267/pexels-photo-1437267.jpeg'
   },
   {
@@ -328,6 +425,9 @@ const products: Product[] = [
     category: 'Meat',
     prices: { seijo: 1280, maruetsu: 980, ff: 1150 },
     unit: '300g',
+    ratingAverage: 0,
+    ratingCount: 0,
+    ratingBreakdown: { "5": 0, "4": 0, "3": 0, "2": 0, "1": 0 },
     image: 'https://images.pexels.com/photos/361184/asparagus-steak-veal-steak-veal-361184.jpeg'
   }
 ];
@@ -913,15 +1013,33 @@ function App() {
     );
   };
 
-  // Rating modal functions
-          <span className="text-sm text-emerald-600">{store.phone}</span>
+  const StoreCard = ({ store }: { store: Store }) => (
+    <div className="bg-white rounded-xl shadow-md hover:shadow-lg transition-all duration-300 overflow-hidden">
+      <div className="p-6">
+        <div className="flex items-start justify-between mb-4">
+          <div>
+            <h3 className="font-bold text-gray-800 mb-1">{store.name}</h3>
+            <div className="flex items-center text-gray-600 mb-2">
+              <MapPin className="h-4 w-4 mr-1" />
+              <span className="text-sm">{store.address}</span>
+            </div>
+          </div>
+        </div>
+        
+        <div className="space-y-2 mb-4">
+          <div className="flex items-center text-gray-600">
+            <span className="text-sm font-medium mr-2">Hours:</span>
+            <span className="text-sm">{store.hours}</span>
+          </div>
+          <div className="flex items-center text-gray-600">
+            <span className="text-sm font-medium mr-2">Phone:</span>
+            <span className="text-sm text-emerald-600">{store.phone}</span>
+          </div>
         </div>
         <button className="w-full mt-4 bg-emerald-600 text-white py-2 px-4 rounded-lg hover:bg-emerald-700 transition-colors duration-200">
           Get Directions
         </button>
       </div>
-        View on Map
-      </button>
     </div>
   );
 
@@ -1013,8 +1131,57 @@ function App() {
                 {/* AI Review Scan Card */}
                 <div 
                   onClick={() => setActiveAIFeature('scan')}
-                      <ProductCard key={product.id} product={product} />
-                      
+                  className="bg-gradient-to-br from-green-50 to-emerald-100 rounded-xl shadow-md hover:shadow-lg transition-all duration-300 p-8 cursor-pointer group border-2 border-transparent hover:border-green-200"
+                >
+                  <div className="flex items-center justify-center w-16 h-16 bg-green-500 rounded-full mb-6 group-hover:scale-110 transition-transform duration-200">
+                    <Camera className="h-8 w-8 text-white" />
+                  </div>
+                  <h3 className="text-xl font-bold text-gray-900 mb-3">AI Review Scan</h3>
+                  <p className="text-gray-600 mb-4">
+                    Scan product labels with your camera to get instant health insights and ingredient analysis.
+                  </p>
+                  <div className="flex items-center text-green-600 font-medium group-hover:translate-x-1 transition-transform duration-200">
+                    Start Scanning <ArrowRight className="h-4 w-4 ml-2" />
+                  </div>
+                </div>
+                
+                {/* AI Recipe Maker Card */}
+                <div 
+                  onClick={() => setActiveAIFeature('recipe')}
+                  className="bg-gradient-to-br from-purple-50 to-violet-100 rounded-xl shadow-md hover:shadow-lg transition-all duration-300 p-8 cursor-pointer group border-2 border-transparent hover:border-purple-200"
+                >
+                  <div className="flex items-center justify-center w-16 h-16 bg-purple-500 rounded-full mb-6 group-hover:scale-110 transition-transform duration-200">
+                    <ChefHat className="h-8 w-8 text-white" />
+                  </div>
+                  <h3 className="text-xl font-bold text-gray-900 mb-3">AI Recipe Maker</h3>
+                  <p className="text-gray-600 mb-4">
+                    Create personalized recipes using your favorite products and dietary preferences.
+                  </p>
+                  <div className="flex items-center text-purple-600 font-medium group-hover:translate-x-1 transition-transform duration-200">
+                    Create Recipes <ArrowRight className="h-4 w-4 ml-2" />
+                  </div>
+                </div>
+              </div>
+            ) : (
+              <div>
+                <button
+                  onClick={() => setActiveAIFeature(null)}
+                  className="mb-6 flex items-center text-gray-600 hover:text-gray-800 transition-colors"
+                >
+                  <ArrowRight className="h-4 w-4 mr-2 rotate-180" />
+                  Back to AI Features
+                </button>
+                
+                {activeAIFeature === 'compare' && (
+                  <div className="bg-white rounded-xl shadow-md p-8">
+                    <div className="mb-6">
+                      <h3 className="text-2xl font-bold text-gray-900 mb-2">AI Product Compare</h3>
+                      <p className="text-gray-600">
+                        Get intelligent recommendations based on price, nutrition, quality, and your preferences
+                      </p>
+                    </div>
+                    
+                    <div className="space-y-6">
                       <div className="relative mb-6">
                         <input
                           type="text"
