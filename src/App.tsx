@@ -193,6 +193,22 @@ const products: Product[] = [
   },
   {
     id: 16,
+    name: 'King Salmon Fillet',
+    category: 'Seafood',
+    prices: { seijo: 4800, maruetsu: 4200, ff: 4500 },
+    unit: '600g',
+    image: 'https://images.pexels.com/photos/725991/pexels-photo-725991.jpeg'
+  },
+  {
+    id: 17,
+    name: 'Smoked Salmon',
+    category: 'Seafood',
+    prices: { seijo: 2300, maruetsu: 1800, ff: 2100 },
+    unit: '200g',
+    image: 'https://images.pexels.com/photos/3296434/pexels-photo-3296434.jpeg'
+  },
+  {
+    id: 18,
     name: 'Udon Noodles (Fresh)',
     category: 'Grains',
     prices: { seijo: 380, maruetsu: 250, ff: 300 },
@@ -200,7 +216,7 @@ const products: Product[] = [
     image: 'https://images.pexels.com/photos/5949915/pexels-photo-5949915.jpeg'
   },
   {
-    id: 17,
+    id: 19,
     name: 'Shiitake Mushrooms',
     category: 'Vegetables',
     prices: { seijo: 580, maruetsu: 420, ff: 480 },
@@ -208,7 +224,7 @@ const products: Product[] = [
     image: 'https://images.pexels.com/photos/1618900/pexels-photo-1618900.jpeg'
   },
   {
-    id: 18,
+    id: 20,
     name: 'Japanese Pickles Mix',
     category: 'Condiments',
     prices: { seijo: 480, maruetsu: 320, ff: 380 },
@@ -216,7 +232,7 @@ const products: Product[] = [
     image: 'https://images.pexels.com/photos/5949915/pexels-photo-5949915.jpeg'
   },
   {
-    id: 19,
+    id: 21,
     name: 'Matcha Powder (Ceremonial)',
     category: 'Beverages',
     prices: { seijo: 2800, maruetsu: 2200, ff: 2500 },
@@ -224,7 +240,7 @@ const products: Product[] = [
     image: 'https://images.pexels.com/photos/1638280/pexels-photo-1638280.jpeg'
   },
   {
-    id: 20,
+    id: 22,
     name: 'Dashi Stock (Instant)',
     category: 'Condiments',
     prices: { seijo: 580, maruetsu: 380, ff: 480 },
@@ -232,7 +248,7 @@ const products: Product[] = [
     image: 'https://images.pexels.com/photos/6419733/pexels-photo-6419733.jpeg'
   },
   {
-    id: 21,
+    id: 23,
     name: 'Panko Breadcrumbs',
     category: 'Condiments',
     prices: { seijo: 280, maruetsu: 180, ff: 220 },
@@ -240,7 +256,7 @@ const products: Product[] = [
     image: 'https://images.pexels.com/photos/209206/pexels-photo-209206.jpeg'
   },
   {
-    id: 22,
+    id: 24,
     name: 'Japanese Curry Roux',
     category: 'Condiments',
     prices: { seijo: 380, maruetsu: 250, ff: 300 },
@@ -248,7 +264,7 @@ const products: Product[] = [
     image: 'https://images.pexels.com/photos/2161543/pexels-photo-2161543.jpeg'
   },
   {
-    id: 23,
+    id: 25,
     name: 'Tempura Flour Mix',
     category: 'Grains',
     prices: { seijo: 480, maruetsu: 320, ff: 380 },
@@ -256,7 +272,7 @@ const products: Product[] = [
     image: 'https://images.pexels.com/photos/1437267/pexels-photo-1437267.jpeg'
   },
   {
-    id: 24,
+    id: 26,
     name: 'Wasabi Paste (Fresh)',
     category: 'Condiments',
     prices: { seijo: 880, maruetsu: 680, ff: 750 },
@@ -264,7 +280,7 @@ const products: Product[] = [
     image: 'https://images.pexels.com/photos/5949915/pexels-photo-5949915.jpeg'
   },
   {
-    id: 25,
+    id: 27,
     name: 'Japanese Sweet Potato',
     category: 'Vegetables',
     prices: { seijo: 480, maruetsu: 320, ff: 380 },
@@ -272,7 +288,7 @@ const products: Product[] = [
     image: 'https://images.pexels.com/photos/1400172/pexels-photo-1400172.jpeg'
   },
   {
-    id: 26,
+    id: 28,
     name: 'Sake (Junmai)',
     category: 'Beverages',
     prices: { seijo: 1880, maruetsu: 1450, ff: 1680 },
@@ -280,7 +296,7 @@ const products: Product[] = [
     image: 'https://images.pexels.com/photos/1638280/pexels-photo-1638280.jpeg'
   },
   {
-    id: 27,
+    id: 29,
     name: 'Ramen Noodles (Instant)',
     category: 'Grains',
     prices: { seijo: 180, maruetsu: 120, ff: 150 },
@@ -288,7 +304,7 @@ const products: Product[] = [
     image: 'https://images.pexels.com/photos/1437267/pexels-photo-1437267.jpeg'
   },
   {
-    id: 28,
+    id: 30,
     name: 'Japanese Cucumber',
     category: 'Vegetables',
     prices: { seijo: 280, maruetsu: 180, ff: 220 },
@@ -296,7 +312,7 @@ const products: Product[] = [
     image: 'https://images.pexels.com/photos/1400172/pexels-photo-1400172.jpeg'
   },
   {
-    id: 29,
+    id: 31,
     name: 'Gyoza Wrappers',
     category: 'Grains',
     prices: { seijo: 380, maruetsu: 250, ff: 300 },
@@ -304,7 +320,7 @@ const products: Product[] = [
     image: 'https://images.pexels.com/photos/1437267/pexels-photo-1437267.jpeg'
   },
   {
-    id: 30,
+    id: 32,
     name: 'Japanese Pork Belly',
     category: 'Meat',
     prices: { seijo: 1280, maruetsu: 980, ff: 1150 },
