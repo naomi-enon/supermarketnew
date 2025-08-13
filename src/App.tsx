@@ -1546,27 +1546,12 @@ function App() {
                 onClick={() => {
                   setShowFlagModal(false);
                   setFlaggingProduct(null);
-                className={`px-4 py-2 rounded border ${selectedProduct.reviews?.length > 0 ? 'text-emerald-700 border-emerald-600 hover:bg-emerald-50' : 'text-slate-400 border-slate-300 cursor-not-allowed'}`}
-                disabled={!selectedProduct.reviews?.length}
-                onClick={() => setShowReviews(true)}
+                }}
+                className="flex-1 px-4 py-2 text-gray-600 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors duration-200"
               >
                 Cancel
               </button>
             </div>
-            
-            {showReviews && (
-              <div className="mt-4 border-t pt-4 space-y-3" data-testid="reviews-list">
-                {selectedProduct.reviews?.map((r, i) => (
-                  <div key={i} className="text-sm">
-                    <span className="text-amber-500 mr-2">{'★'.repeat(r.stars)}{'☆'.repeat(5 - r.stars)}</span>
-                    <span className="text-slate-800">{r.text}</span>
-                  </div>
-                ))}
-                <div className="mt-3">
-                  <button className="text-emerald-700 underline" onClick={() => setShowReviews(false)}>Hide reviews</button>
-                </div>
-              </div>
-            )}
           </div>
         </div>
       )}
