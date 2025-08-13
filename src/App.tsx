@@ -1176,8 +1176,8 @@ function App() {
                   <div className="flex items-center justify-center w-16 h-16 bg-green-500 rounded-full mb-6 group-hover:scale-110 transition-transform duration-200">
                     <Camera className="h-8 w-8 text-white" />
                   </div>
-                  <h3 className="text-xl font-bold text-gray-900 mb-8">AI Review Summary</h3>
-                  <p className="text-gray-600 mb-2">Summarizes customer reviews with AI.</p>
+                  <h3 className="text-xl font-bold text-gray-900 mb-9">AI Review Summary</h3>
+                  <p className="text-gray-600 mb-4">Summarizes customer reviews with AI.</p>
                   
                   <div className="flex items-center text-green-600 font-medium group-hover:translate-x-1 transition-transform duration-200">
                     Start Summarizing <ArrowRight className="h-4 w-4 ml-2" />  
