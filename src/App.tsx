@@ -520,6 +520,8 @@ const ReviewModal = ({ product, isOpen, onClose }: {
   isOpen: boolean, 
   onClose: () => void 
 }) => {
+  const [showReviews, setShowReviews] = useState(false);
+  
   if (!isOpen) return null;
 
   const handleBackdropClick = (e: React.MouseEvent) => {
@@ -620,10 +622,13 @@ const ReviewModal = ({ product, isOpen, onClose }: {
           {/* Action buttons */}
           <div className="flex gap-4 pt-4 border-t">
             <button
-              type="button"
-              aria-controls="reviews-list"
+              disabled={product.ratingCount === 0}
               onClick={() => setShowReviews(true)}
-              className="px-4 py-2 rounded border text-emerald-700 border-emerald-600 hover:bg-emerald-50"
+              className={`flex-1 py-2 px-4 rounded-lg font-medium transition-colors ${
+                product.ratingCount === 0
+                  ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
+                  : 'bg-blue-50 text-blue-600 hover:bg-blue-100'
+              }`}
             >
               Read customer reviews
             </button>
@@ -634,6 +639,28 @@ const ReviewModal = ({ product, isOpen, onClose }: {
               Write a review
             </button>
           </div>
+
+          {showReviews && product && (
+            <div id="reviews-list" className="mt-4 border-t pt-4 space-y-3">
+              {product.reviews && product.reviews.length > 0 ? (
+                product.reviews.slice(0,5).map((r, i) => (
+                  <div key={i} className="text-sm">
+                    <span className="text-amber-500 mr-2">
+                      {"★".repeat(r.stars)}{"☆".repeat(5 - r.stars)}
+                    </span>
+                    <span className="text-slate-800">{r.text}</span>
+                  </div>
+                ))
+              ) : (
+                <div className="text-slate-500">No reviews yet — be the first to review.</div>
+              )}
+              <div className="mt-3">
+                <button className="text-emerald-700 underline" onClick={() => setShowReviews(false)}>
+                  Hide reviews
+                </button>
+              </div>
+            </div>
+          )}
         </div>
       </div>
     </div>
@@ -841,7 +868,6 @@ function App() {
       ratingBreakdown: product.ratingBreakdown ?? {5:0,4:0,3:0,2:0,1:0},
       reviews: product.reviews ?? []
     });
-    setShowReviews(false); // reset when opening
     setIsReviewModalOpen(true);
   };
 
