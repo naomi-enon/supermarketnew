@@ -1182,7 +1182,7 @@ function App() {
                     onClick={() => setShowReviewSearch(true)}
                     className="bg-green-600 text-white px-6 py-2 rounded-lg hover:bg-green-700 transition-colors"
                   >
-                    Start Reviewing
+                    Start Summarizing
                   </button>
                   
                   <div className="flex items-center text-green-600 font-medium group-hover:translate-x-1 transition-transform duration-200">
