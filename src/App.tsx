@@ -1033,12 +1033,15 @@ function App() {
           </div>
           <div className="flex items-center text-gray-600">
             <span className="text-sm font-medium mr-2">Phone:</span>
-            <span className="text-sm text-emerald-600">{store.phone}</span>
+            {/* Rating & actions footer — single parent wrapper */}
+            <div className="mt-3">
+              <span className="text-sm text-emerald-600">{store.phone}</span>
+              <button className="w-full mt-4 bg-emerald-600 text-white py-2 px-4 rounded-lg hover:bg-emerald-700 transition-colors duration-200">
+                Get Directions
+              </button>
+            </div>
           </div>
         </div>
-        <button className="w-full mt-4 bg-emerald-600 text-white py-2 px-4 rounded-lg hover:bg-emerald-700 transition-colors duration-200">
-          Get Directions
-        </button>
       </div>
     </div>
   );
