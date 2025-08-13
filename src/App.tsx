@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from 'react';
-import { Search, MapPin, Star, Camera, MessageSquare, X, BarChart3, Flag } from 'lucide-react';
+import { Search, MapPin, Star, Camera, MessageSquare, X, BarChart3, Flag, Brain, ArrowRight, ChefHat, Sparkles, AlertTriangle } from 'lucide-react';
 import RatingRow from './components/RatingRow';
 
 interface Product {
