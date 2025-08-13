@@ -1055,15 +1055,13 @@ function App() {
           </div>
           <div className="flex items-center text-gray-600">
             <span className="text-sm font-medium mr-2">Phone:</span>
-            {/* Rating & actions footer — single parent wrapper */}
-            <div className="mt-3">
-              <span className="text-sm text-emerald-600">{store.phone}</span>
-              <button className="w-full mt-4 bg-emerald-600 text-white py-2 px-4 rounded-lg hover:bg-emerald-700 transition-colors duration-200">
-                Get Directions
-              </button>
-            </div>
+            <span className="text-sm text-emerald-600">{store.phone}</span>
           </div>
         </div>
+        
+        <button className="w-full mt-4 bg-emerald-600 text-white py-2 px-4 rounded-lg hover:bg-emerald-700 transition-colors duration-200">
+          Get Directions
+        </button>
       </div>
     </div>
   );
@@ -1540,15 +1538,14 @@ function App() {
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
           <div className="bg-white rounded-xl shadow-xl max-w-md w-full p-6">
             <div className="flex items-center mb-4">
-            <div className="flex items-center gap-3 mb-3">
-              <MessageSquare className="w-6 h-6 text-indigo-600" />
-              <h3 className="text-lg font-semibold text-gray-900">AI Review Summary</h3>
+              <Flag className="w-6 h-6 text-orange-500 mr-3" />
+              <h3 className="text-lg font-semibold text-gray-900">Flag Price Issue</h3>
             </div>
             <p className="text-gray-600 mb-4">
-              Summarizes customer reviews into key pros, cons, and a clear verdict.
+              Help us improve by reporting price issues. What's wrong with this price?
             </p>
             
-              Start Summary
+            <div className="space-y-2 mb-6">
               {[
                 'Price is too high',
                 'Price is too low',
