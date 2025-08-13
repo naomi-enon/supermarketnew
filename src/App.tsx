@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from 'react';
-import { Star, MapPin, Search, Pen as Yen, Flag, AlertTriangle, Brain, Camera, ChefHat, Sparkles, ArrowRight } from 'lucide-react';
+import { Star, MapPin, Search, Pen as Yen, Flag, AlertTriangle, Brain, Camera, ChefHat, Sparkles, ArrowRight, X } from 'lucide-react';
 
 interface Product {
   id: number;
@@ -329,6 +329,205 @@ const products: Product[] = [
   }
 ];
 
+// Demo rating data for the three salmon products
+const ratingData = {
+  "SAL-ATL-100": {
+    "id": "SAL-ATL-100",
+    "name": "Fresh Atlantic Salmon Fillet",
+    "size": "500g",
+    "ratingAverage": 0,
+    "ratingCount": 0,
+    "ratingBreakdown": { "5": 0, "4": 0, "3": 0, "2": 0, "1": 0 }
+  },
+  "SAL-KING-600": {
+    "id": "SAL-KING-600", 
+    "name": "King Salmon Fillet",
+    "size": "600g",
+    "ratingAverage": 0,
+    "ratingCount": 0,
+    "ratingBreakdown": { "5": 0, "4": 0, "3": 0, "2": 0, "1": 0 }
+  },
+  "SAL-SMOK-200": {
+    "id": "SAL-SMOK-200",
+    "name": "Smoked Salmon", 
+    "size": "200g",
+    "ratingAverage": 0,
+    "ratingCount": 0,
+    "ratingBreakdown": { "5": 0, "4": 0, "3": 0, "2": 0, "1": 0 }
+  }
+};
+
+// Helper function to format rating
+const formatRating = (avg: number): string => {
+  return avg.toFixed(1);
+};
+
+// Helper function to render stars
+const renderStars = (rating: number, size: 'sm' | 'lg' = 'sm') => {
+  const stars = [];
+  const fullStars = Math.floor(rating);
+  const hasHalfStar = rating % 1 >= 0.5;
+  const emptyStars = 5 - fullStars - (hasHalfStar ? 1 : 0);
+  
+  const starSize = size === 'lg' ? 'w-6 h-6' : 'w-4 h-4';
+  
+  // Full stars
+  for (let i = 0; i < fullStars; i++) {
+    stars.push(
+      <Star key={`full-${i}`} className={`${starSize} fill-yellow-400 text-yellow-400`} />
+    );
+  }
+  
+  // Half star
+  if (hasHalfStar) {
+    stars.push(
+      <div key="half" className={`${starSize} relative`}>
+        <Star className={`${starSize} text-gray-300 absolute`} />
+        <div className="overflow-hidden w-1/2">
+          <Star className={`${starSize} fill-yellow-400 text-yellow-400`} />
+        </div>
+      </div>
+    );
+  }
+  
+  // Empty stars
+  for (let i = 0; i < emptyStars; i++) {
+    stars.push(
+      <Star key={`empty-${i}`} className={`${starSize} text-gray-300`} />
+    );
+  }
+  
+  return stars;
+};
+
+// Review Modal Component
+const ReviewModal = ({ product, isOpen, onClose }: { 
+  product: any, 
+  isOpen: boolean, 
+  onClose: () => void 
+}) => {
+  if (!isOpen) return null;
+
+  const handleBackdropClick = (e: React.MouseEvent) => {
+    if (e.target === e.currentTarget) {
+      onClose();
+    }
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === 'Escape') {
+      onClose();
+    }
+  };
+
+  const handleWriteReview = () => {
+    onClose();
+    alert('Coming soon');
+  };
+
+  // Calculate percentages for distribution bars
+  const getPercentage = (count: number, total: number): number => {
+    return total === 0 ? 0 : Math.round((count / total) * 100);
+  };
+
+  return (
+    <div 
+      className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4"
+      onClick={handleBackdropClick}
+      onKeyDown={handleKeyDown}
+      tabIndex={-1}
+    >
+      {/* Review modal */}
+      <div 
+        className="bg-white rounded-lg shadow-xl w-full max-w-lg mx-4 md:mx-0"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby={`rating-panel-${product.id}`}
+      >
+        {/* Header */}
+        <div className="flex items-center justify-between p-6 border-b">
+          <div className="flex items-center gap-3">
+            <div className="flex items-center gap-1">
+              {renderStars(product.ratingAverage, 'lg')}
+            </div>
+            <span className="text-2xl font-bold">
+              {formatRating(product.ratingAverage)}/5
+            </span>
+          </div>
+          <button
+            onClick={onClose}
+            className="p-2 hover:bg-gray-100 rounded-full transition-colors"
+            aria-label="Close review panel"
+          >
+            <X className="w-5 h-5" />
+          </button>
+        </div>
+
+        {/* Content */}
+        <div className="p-6">
+          {/* Total count */}
+          <p className="text-gray-600 mb-6">
+            {product.ratingCount > 0 
+              ? `${product.ratingCount} reviews` 
+              : 'No reviews yet'
+            }
+          </p>
+
+          {/* Distribution bars */}
+          <div className="space-y-3 mb-6">
+            {[5, 4, 3, 2, 1].map((star) => {
+              const count = product.ratingBreakdown[star.toString()];
+              const percentage = getPercentage(count, product.ratingCount);
+              
+              return (
+                <div key={star} className="flex items-center gap-3">
+                  <span className="text-sm font-medium w-8">{star}★</span>
+                  <div className="flex-1 bg-gray-200 rounded-full h-2">
+                    <div 
+                      className="bg-yellow-400 h-2 rounded-full transition-all duration-300"
+                      style={{ width: `${percentage}%` }}
+                    />
+                  </div>
+                  <span className="text-sm text-gray-600 w-10 text-right">
+                    {percentage}%
+                  </span>
+                </div>
+              );
+            })}
+          </div>
+
+          {/* No reviews state */}
+          {product.ratingCount === 0 && (
+            <div className="text-center py-4 text-gray-500">
+              No reviews yet — be the first to review.
+            </div>
+          )}
+
+          {/* Action buttons */}
+          <div className="flex gap-4 pt-4 border-t">
+            <button
+              disabled={product.ratingCount === 0}
+              className={`flex-1 py-2 px-4 rounded-lg font-medium transition-colors ${
+                product.ratingCount === 0
+                  ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
+                  : 'bg-blue-50 text-blue-600 hover:bg-blue-100'
+              }`}
+            >
+              Read customer reviews
+            </button>
+            <button
+              onClick={handleWriteReview}
+              className="flex-1 py-2 px-4 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 transition-colors"
+            >
+              Write a review
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
 function App() {
   const [activeTab, setActiveTab] = useState('favorites');
   const [favorites, setFavorites] = useState<Set<number>>(new Set([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20]));
@@ -347,6 +546,8 @@ function App() {
   const [aiCompareQuery, setAiCompareQuery] = useState('');
   const [aiCompareResult, setAiCompareResult] = useState<AICompareResult | null>(null);
   const [isAnalyzing, setIsAnalyzing] = useState(false);
+  const [selectedProductForReview, setSelectedProductForReview] = useState<any>(null);
+  const [isReviewModalOpen, setIsReviewModalOpen] = useState(false);
 
   const toggleFavorite = (productId: number) => {
     const newFavorites = new Set(favorites);
@@ -519,6 +720,19 @@ function App() {
     };
   };
 
+  // Handle rating click
+  const handleRatingClick = (product: any) => {
+    // Map product to rating data
+    const ratingKey = product.name.includes('Fresh Atlantic Salmon') ? 'SAL-ATL-100' :
+                     product.name.includes('King Salmon') ? 'SAL-KING-600' :
+                     product.name.includes('Smoked Salmon') ? 'SAL-SMOK-200' : null;
+    
+    if (ratingKey && ratingData[ratingKey]) {
+      setSelectedProductForReview(ratingData[ratingKey]);
+      setIsReviewModalOpen(true);
+    }
+  };
+
   const filteredProducts = useMemo(() => {
     return products.filter(product =>
       product.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -535,6 +749,12 @@ function App() {
     const lowestStore = getLowestPriceStore(product.prices);
     const isFavorite = favorites.has(product.id);
     const quantity = quantities[product.id] || 1;
+
+    // Get rating data for this product
+    const ratingKey = product.name.includes('Fresh Atlantic Salmon') ? 'SAL-ATL-100' :
+                     product.name.includes('King Salmon') ? 'SAL-KING-600' :
+                     product.name.includes('Smoked Salmon') ? 'SAL-SMOK-200' : null;
+    const rating = ratingKey ? ratingData[ratingKey] : null;
 
     return (
       <div className="bg-white rounded-xl shadow-md hover:shadow-lg transition-all duration-300 overflow-hidden">
@@ -564,6 +784,26 @@ function App() {
         <div className="p-4">
           <h3 className="font-bold text-gray-800 mb-2 line-clamp-2">{product.name}</h3>
           <p className="text-sm text-gray-500 mb-3">{product.unit}</p>
+          
+          {/* Ratings row */}
+          {rating && (
+            <button
+              onClick={() => handleRatingClick(product)}
+              className="w-full flex items-center gap-2 py-2 px-1 rounded hover:bg-gray-50 transition-colors cursor-pointer mb-3"
+              aria-haspopup="dialog"
+              aria-controls={`rating-panel-${rating.id}`}
+            >
+              <div className="flex items-center gap-1" aria-label={`Average rating ${formatRating(rating.ratingAverage)} out of 5`}>
+                {renderStars(rating.ratingAverage)}
+              </div>
+              <span className="text-sm text-gray-600">
+                {rating.ratingCount > 0 
+                  ? `${formatRating(rating.ratingAverage)} (${rating.ratingCount})`
+                  : 'No reviews yet'
+                }
+              </span>
+            </button>
+          )}
           
           {showQuantity && (
             <div className="flex items-center justify-between mb-3 p-2 bg-gray-50 rounded-lg">
@@ -1219,6 +1459,13 @@ function App() {
           </div>
         </div>
       )}
+      
+      {/* Review Modal */}
+      <ReviewModal 
+        product={selectedProductForReview}
+        isOpen={isReviewModalOpen}
+        onClose={() => setIsReviewModalOpen(false)}
+      />
     </div>
   );
 }
