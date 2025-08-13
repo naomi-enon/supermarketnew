@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from 'react';
-import { ShoppingCart, Search, MapPin, Star, X, StarHalf, Brain, ArrowRight, Sparkles, Camera, ChefHat, Flag, AlertTriangle } from 'lucide-react';
+import { Search, MapPin, ShoppingCart, MessageSquare, TrendingUp, Users, Star } from 'lucide-react';
 import RatingRow from './components/RatingRow';
 
 interface Product {
@@ -1540,15 +1540,15 @@ function App() {
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
           <div className="bg-white rounded-xl shadow-xl max-w-md w-full p-6">
             <div className="flex items-center mb-4">
-              <Flag className="h-6 w-6 text-orange-500 mr-2" />
-              <h3 className="text-lg font-bold text-gray-900">Flag Incorrect Price</h3>
+            <div className="flex items-center gap-3 mb-3">
+              <MessageSquare className="w-6 h-6 text-indigo-600" />
+              <h3 className="text-lg font-semibold text-gray-900">AI Review Summary</h3>
             </div>
-            
             <p className="text-gray-600 mb-4">
-              Report an incorrect price for this product at {getStoreName(flaggingProduct.store)}.
+              Summarizes customer reviews into key pros, cons, and a clear verdict.
             </p>
             
-            <div className="space-y-3 mb-6">
+              Start Summary
               {[
                 'Price is too high',
                 'Price is too low',
