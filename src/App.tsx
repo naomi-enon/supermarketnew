@@ -1162,9 +1162,11 @@ function App() {
                   <h3 className="text-xl font-bold text-gray-900 mb-3">AI Review Summary</h3>
                   <p className="text-gray-600 mb-8">
                     Summarizes customer reviews with AI.
+
+                    
                   </p>
                   <div className="flex items-center text-green-600 font-medium group-hover:translate-x-1 transition-transform duration-200">
-                    Start Scanning <ArrowRight className="h-4 w-4 ml-2" />
+                    Start Summarizing <ArrowRight className="h-4 w-4 ml-2" />
                   </div>
                 </div>
                 
