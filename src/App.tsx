@@ -253,15 +253,15 @@ const products: Product[] = [
     ratingAverage: 3.8,
     ratingCount: 5,
     ratingBreakdown: { "5": 2, "4": 1, "3": 1, "2": 1, "1": 0 },
+    ratingAverage: 3.8,
+    ratingCount: 5,
+    ratingBreakdown: { "5": 2, "4": 1, "3": 1, "2": 1, "1": 0 },
     reviews: [
-      // 3 positive
       { stars: 5, text: "Rich flavor, thick cut, grills beautifully." },
       { stars: 5, text: "Moist texture, bright color, family favorite." },
       { stars: 4, text: "Fresh taste, good value, cooks evenly." },
-      // 1 neutral
       { stars: 3, text: "Decent quality, price is just okay." },
-      // 1 negative
-      { stars: 2, text: "One piece had bones and uneven thickness." }
+      { stars: 2, text: "Some bones found, uneven thickness." }
     ],
     image: 'https://images.pexels.com/photos/725991/pexels-photo-725991.jpeg'
   },
@@ -836,13 +836,14 @@ function App() {
 
   // Handle rating click
   const handleRatingClick = (product: any) => {
-    console.debug("OPEN MODAL FOR", product.name, product.ratingCount);
     setSelectedProductForReview({
       ...product,
       ratingAverage: product.ratingAverage ?? 0,
       ratingCount: product.ratingCount ?? 0,
       ratingBreakdown: product.ratingBreakdown ?? {5:0,4:0,3:0,2:0,1:0},
+      reviews: product.reviews ?? []
     });
+    setShowReviews(false); // reset when opening
     setIsReviewModalOpen(true);
   };
 
