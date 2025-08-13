@@ -250,9 +250,19 @@ const products: Product[] = [
     category: 'Seafood',
     prices: { seijo: 4800, maruetsu: 4200, ff: 4500 },
     unit: '600g',
-    ratingAverage: 4.5,
-    ratingCount: 23,
-    ratingBreakdown: { "5": 15, "4": 6, "3": 1, "2": 1, "1": 0 },
+    ratingAverage: 3.8,
+    ratingCount: 5,
+    ratingBreakdown: { "5": 2, "4": 1, "3": 1, "2": 1, "1": 0 },
+    reviews: [
+      // 3 positive
+      { stars: 5, text: "Rich flavor, thick cut, grills beautifully." },
+      { stars: 5, text: "Moist texture, bright color, family favorite." },
+      { stars: 4, text: "Fresh taste, good value, cooks evenly." },
+      // 1 neutral
+      { stars: 3, text: "Decent quality, price is just okay." },
+      // 1 negative
+      { stars: 2, text: "One piece had bones and uneven thickness." }
+    ],
     image: 'https://images.pexels.com/photos/725991/pexels-photo-725991.jpeg'
   },
   {
