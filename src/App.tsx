@@ -1185,7 +1185,7 @@ function App() {
                     Create personalized recipes using your favorite products and dietary preferences.
                   </p>
                   <div className="flex items-center text-purple-600 font-medium group-hover:translate-x-1 transition-transform duration-200">
-                    Create Recipes <ArrowRight className="h-4 w-4 ml-16" />
+                    Create Recipes <ArrowRight className="h-4 w-4 ml-2" />
                   </div>
                 </div>
               </div>
