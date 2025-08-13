@@ -1160,7 +1160,7 @@ function App() {
                     <Camera className="h-8 w-8 text-white" />
                   </div>
                   <h3 className="text-xl font-bold text-gray-900 mb-3">AI Review Summary</h3>
-                  <p className="text-gray-600 mb-8">
+                  <p className="text-gray-600 mb-12">
                     Summarizes customer reviews with AI.
                   </p>
                   
