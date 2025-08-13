@@ -1,5 +1,6 @@
 import React, { useState, useMemo } from 'react';
 import { ShoppingCart, Search, MapPin, Star, X, StarHalf, Brain, ArrowRight, Sparkles, Camera, ChefHat, Flag, AlertTriangle } from 'lucide-react';
+import RatingRow from './components/RatingRow';
 
 interface Product {
   id: number;
@@ -183,9 +184,9 @@ const products: Product[] = [
     category: 'Fruits',
     prices: { seijo: 890, maruetsu: 680, ff: 750 },
     unit: '1kg',
-    ratingAverage: 0,
-    ratingCount: 0,
-    ratingBreakdown: { "5": 0, "4": 0, "3": 0, "2": 0, "1": 0 },
+    ratingAverage: 4.2,
+    ratingCount: 15,
+    ratingBreakdown: { "5": 8, "4": 4, "3": 2, "2": 1, "1": 0 },
     image: 'https://images.pexels.com/photos/1132047/pexels-photo-1132047.jpeg'
   },
   {
@@ -249,9 +250,9 @@ const products: Product[] = [
     category: 'Seafood',
     prices: { seijo: 4800, maruetsu: 4200, ff: 4500 },
     unit: '600g',
-    ratingAverage: 0,
-    ratingCount: 0,
-    ratingBreakdown: { "5": 0, "4": 0, "3": 0, "2": 0, "1": 0 },
+    ratingAverage: 4.5,
+    ratingCount: 23,
+    ratingBreakdown: { "5": 15, "4": 6, "3": 1, "2": 1, "1": 0 },
     image: 'https://images.pexels.com/photos/725991/pexels-photo-725991.jpeg'
   },
   {
@@ -260,9 +261,9 @@ const products: Product[] = [
     category: 'Seafood',
     prices: { seijo: 2300, maruetsu: 1800, ff: 2100 },
     unit: '200g',
-    ratingAverage: 0,
-    ratingCount: 0,
-    ratingBreakdown: { "5": 0, "4": 0, "3": 0, "2": 0, "1": 0 },
+    ratingAverage: 3.8,
+    ratingCount: 12,
+    ratingBreakdown: { "5": 4, "4": 5, "3": 2, "2": 1, "1": 0 },
     image: 'https://images.pexels.com/photos/3296434/pexels-photo-3296434.jpeg'
   },
   {
@@ -888,25 +889,12 @@ function App() {
           <h3 className="font-bold text-gray-800 mb-2 line-clamp-2">{product.name}</h3>
           <p className="text-sm text-gray-500 mb-3">{product.unit}</p>
           
-          {/* Ratings row */}
-          {rating && (
-            <button
-              onClick={() => handleRatingClick(product)}
-              className="w-full flex items-center gap-2 py-2 px-1 rounded hover:bg-gray-50 transition-colors cursor-pointer mb-3"
-              aria-haspopup="dialog"
-              aria-controls={`rating-panel-${rating.id}`}
-            >
-              <div className="flex items-center gap-1" aria-label={`Average rating ${formatRating(rating.ratingAverage)} out of 5`}>
-                {renderStars(rating.ratingAverage)}
-              </div>
-              <span className="text-sm text-gray-600">
-                {rating.ratingCount > 0 
-                  ? `${formatRating(rating.ratingAverage)} (${rating.ratingCount})`
-                  : 'No reviews yet'
-                }
-              </span>
-            </button>
-          )}
+          {/* Rating row for all products */}
+          <RatingRow
+            average={product.ratingAverage ?? 0}
+            count={product.ratingCount ?? 0}
+            onClick={() => handleRatingClick(product)}
+          />
           
           {showQuantity && (
             <div className="flex items-center justify-between mb-3 p-2 bg-gray-50 rounded-lg">
