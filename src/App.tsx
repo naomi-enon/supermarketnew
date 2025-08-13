@@ -826,15 +826,14 @@ function App() {
 
   // Handle rating click
   const handleRatingClick = (product: any) => {
-    // Map product to rating data
-    const ratingKey = product.name.includes('Fresh Atlantic Salmon') ? 'SAL-ATL-100' :
-                     product.name.includes('King Salmon') ? 'SAL-KING-600' :
-                     product.name.includes('Smoked Salmon') ? 'SAL-SMOK-200' : null;
-    
-    if (ratingKey && ratingData[ratingKey]) {
-      setSelectedProductForReview(ratingData[ratingKey]);
-      setIsReviewModalOpen(true);
-    }
+    console.debug("OPEN MODAL FOR", product.name, product.ratingCount);
+    setSelectedProductForReview({
+      ...product,
+      ratingAverage: product.ratingAverage ?? 0,
+      ratingCount: product.ratingCount ?? 0,
+      ratingBreakdown: product.ratingBreakdown ?? {5:0,4:0,3:0,2:0,1:0},
+    });
+    setIsReviewModalOpen(true);
   };
 
   const filteredProducts = useMemo(() => {
