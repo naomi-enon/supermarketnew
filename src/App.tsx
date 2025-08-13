@@ -1163,9 +1163,7 @@ function App() {
                   <p className="text-gray-600 mb-8">
                     Summarizes customer reviews with AI.
                   </p>
-                  <p <br /><br /> 
-                  <br /><br />
-                  </p>
+                  
                   <p></p>
                   <div className="flex items-center text-green-600 font-medium group-hover:translate-x-1 transition-transform duration-200">
 
