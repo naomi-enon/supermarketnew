@@ -620,12 +620,10 @@ const ReviewModal = ({ product, isOpen, onClose }: {
           {/* Action buttons */}
           <div className="flex gap-4 pt-4 border-t">
             <button
-              disabled={product.ratingCount === 0}
-              className={`flex-1 py-2 px-4 rounded-lg font-medium transition-colors ${
-                product.ratingCount === 0
-                  ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
-                  : 'bg-blue-50 text-blue-600 hover:bg-blue-100'
-              }`}
+              type="button"
+              aria-controls="reviews-list"
+              onClick={() => setShowReviews(true)}
+              className="px-4 py-2 rounded border text-emerald-700 border-emerald-600 hover:bg-emerald-50"
             >
               Read customer reviews
             </button>
